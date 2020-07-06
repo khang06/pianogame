@@ -60,9 +60,13 @@ static pascal OSErr OpenEventHandlerProc(const AppleEvent *event, AppleEvent *, 
 
 
 
-
+#ifdef WINDOWED
+static const int WindowWidth = 1280;
+static const int WindowHeight = 720;
+#else
 static const int WindowWidth  = Compatible::GetDisplayWidth();
 static const int WindowHeight = Compatible::GetDisplayHeight();
+#endif
 
 GameStateManager state_manager(WindowWidth, WindowHeight);
 
@@ -259,9 +263,15 @@ int main(int argc, char *argv[])
       ReasonableSynthVolume volume_correction;
 
 #ifdef WIN32
-
+#ifdef WINDOWED
+      // TODO: fix window width for WS_OVERLAPPED
+      HWND hwnd = CreateWindow(application_name.c_str(), friendly_app_name.c_str(),
+          WS_POPUP, Compatible::GetDisplayWidth() / 2 - WindowWidth / 2, Compatible::GetDisplayHeight() / 2 - WindowHeight / 2,
+          WindowWidth, WindowHeight, HWND_DESKTOP, 0, instance, 0);
+#else
       HWND hwnd = CreateWindow(application_name.c_str(), friendly_app_name.c_str(),
          WS_POPUP, 0, 0, WindowWidth, WindowHeight, HWND_DESKTOP, 0, instance, 0);
+#endif
 
       HDC dc_win = GetDC(hwnd);
       if (!dc_win) throw PianoGameError(L"Couldn't get window device context.");

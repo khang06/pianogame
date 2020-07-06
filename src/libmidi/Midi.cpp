@@ -8,7 +8,10 @@
 #include "MidiUtil.h"
 
 #include <fstream>
+#include <sstream>
+#include <iterator>
 #include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -29,7 +32,9 @@ Midi Midi::ReadFromFile(const wstring &filename)
 
    try
    {
-      m = ReadFromStream(file);
+      stringstream file_mem;
+      copy(istreambuf_iterator<char>(file), istreambuf_iterator<char>(), ostreambuf_iterator<char>(file_mem));
+      m = ReadFromStream(file_mem);
    }
    catch (const MidiError &e)
    {
@@ -397,7 +402,7 @@ MidiEventListWithTrackId Midi::Update(microseconds_t delta_microseconds)
       const size_t event_count = track_events.size();
       for (size_t j = 0; j < event_count; ++j)
       {
-         aggregated_events.insert(aggregated_events.end(), make_pair<size_t, MidiEvent>(i, track_events[j]));
+         aggregated_events.insert(aggregated_events.end(), make_pair(i, track_events[j]));
       }
    }
 
