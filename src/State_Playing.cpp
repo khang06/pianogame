@@ -89,7 +89,7 @@ void PlayingState::Init()
    const static microseconds_t DefaultShowDurationMicroseconds = 3250000;
    m_show_duration = DefaultShowDurationMicroseconds;
 
-   m_keyboard = new KeyboardDisplay(KeyboardSize88, GetStateWidth() - Layout::ScreenMarginX*2, CalcKeyboardHeight());
+   m_keyboard = new KeyboardDisplay(KeyboardSize128, GetStateWidth() - Layout::ScreenMarginX*2, CalcKeyboardHeight());
 
    // Hide the mouse cursor while we're playing
    Compatible::HideMouseCursor();

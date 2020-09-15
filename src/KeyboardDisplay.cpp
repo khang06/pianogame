@@ -108,6 +108,7 @@ int KeyboardDisplay::GetStartingOctave() const
    const static int StartingOctaveOn61 = 1; // TODO!
    const static int StartingOctaveOn76 = 0; // TODO!
    const static int StartingOctaveOn88 = 0;
+   const static int StartingOctaveOn128 = -1;
 
    switch (m_size)
    {
@@ -116,6 +117,7 @@ int KeyboardDisplay::GetStartingOctave() const
    case KeyboardSize61: return StartingOctaveOn61;
    case KeyboardSize76: return StartingOctaveOn76;
    case KeyboardSize88: return StartingOctaveOn88;
+   case KeyboardSize128: return StartingOctaveOn128;
    default: throw PianoGameError(Error_BadPianoType);
    }
 }
@@ -128,6 +130,7 @@ char KeyboardDisplay::GetStartingNote() const
    const static char StartingKeyOn61 = 'C'; // C1-C6 // TODO!
    const static char StartingKeyOn76 = 'E'; // E0-G6 // TODO!
    const static char StartingKeyOn88 = 'A'; // A0-C6
+   const static char StartingKeyOn128 = 'C';
 
    switch (m_size)
    {
@@ -136,6 +139,7 @@ char KeyboardDisplay::GetStartingNote() const
    case KeyboardSize61: return StartingKeyOn61;
    case KeyboardSize76: return StartingKeyOn76;
    case KeyboardSize88: return StartingKeyOn88;
+   case KeyboardSize128: return StartingKeyOn128;
    default: throw PianoGameError(Error_BadPianoType);
    }
 }
@@ -148,6 +152,7 @@ int KeyboardDisplay::GetWhiteKeyCount() const
    const static int WhiteKeysOn61 = 36;
    const static int WhiteKeysOn76 = 45;
    const static int WhiteKeysOn88 = 52;
+   const static int WhiteKeysOn128 = 75;
 
    switch (m_size)
    {
@@ -156,6 +161,7 @@ int KeyboardDisplay::GetWhiteKeyCount() const
    case KeyboardSize61: return WhiteKeysOn61;
    case KeyboardSize76: return WhiteKeysOn76;
    case KeyboardSize88: return WhiteKeysOn88;
+   case KeyboardSize128: return WhiteKeysOn128;
    default: throw PianoGameError(Error_BadPianoType);
    }
 }
@@ -407,6 +413,7 @@ void KeyboardDisplay::DrawNotePass(Renderer &renderer, const Tga *tex_white, con
    case KeyboardSize61: keyboard_type_offset = 7 - WhiteNotesPerOctave; break; // TODO!
    case KeyboardSize76: keyboard_type_offset = 5 - WhiteNotesPerOctave; break; // TODO!
    case KeyboardSize88: keyboard_type_offset = 2 - WhiteNotesPerOctave; break;
+   case KeyboardSize128: keyboard_type_offset = 7 - WhiteNotesPerOctave; break;
    default: throw PianoGameError(Error_BadPianoType);
    }
 

@@ -21,7 +21,8 @@ enum KeyboardSize
    KeyboardSize49,
    KeyboardSize61,
    KeyboardSize76,
-   KeyboardSize88
+   KeyboardSize88,
+   KeyboardSize128
 };
 
 
