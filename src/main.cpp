@@ -375,14 +375,11 @@ int main(int argc, char *argv[])
          }
          else
          {
-            if (window_state.IsActive())
-            {
-               state_manager.Update(window_state.JustActivated());
+            state_manager.Update(false);
 
-               Renderer renderer(dc_win);
-               renderer.SetVSyncInterval(1);
-               state_manager.Draw(renderer);
-            }
+            Renderer renderer(dc_win);
+            renderer.SetVSyncInterval(0);
+            state_manager.Draw(renderer);
          }
       }
 

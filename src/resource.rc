@@ -33,6 +33,7 @@ tracks_PlaySong         GRAPHICS    "..\\graphics\\tracks_PlaySong.tga"
 
 title_InputBox          GRAPHICS    "..\\graphics\\title_InputBox.tga"
 title_OutputBox         GRAPHICS    "..\\graphics\\title_OutputBox.tga"
+title_FramedumpBox      GRAPHICS    "..\\graphics\\title_FramedumpBox.tga"
 title_SongBox           GRAPHICS    "..\\graphics\\title_SongBox.tga"
 
 trackbox                GRAPHICS    "..\\graphics\\trackbox.tga"

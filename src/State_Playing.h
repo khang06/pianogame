@@ -80,6 +80,12 @@ private:
 
    // For octave sliding
    int m_note_offset;
+
+   unsigned long m_manual_ms;
+   unsigned long m_last_delta;
+   size_t m_delay_idx;
+   HANDLE m_framedump_handle;
+   void* m_framedump_fb;
 };
 
 #endif

@@ -122,6 +122,7 @@ void TitleState::Init()
    const MidiCommDescriptionList input_devices = MidiCommIn::GetDeviceList();
    m_output_tile = new DeviceTile((GetStateWidth() - DeviceTileWidth) / 2, initial_y + each_y*1, output_device_id, DeviceTileOutput, output_devices, GetTexture(InterfaceButtons), GetTexture(OutputBox));
    m_input_tile = new DeviceTile((GetStateWidth() - DeviceTileWidth) / 2, initial_y + each_y*2, input_device_id, DeviceTileInput, input_devices, GetTexture(InterfaceButtons), GetTexture(InputBox));
+   m_framedump_tile = new FramedumpTile((GetStateWidth() - FramedumpTileWidth) / 2, initial_y + each_y*3, GetTexture(InterfaceButtons), GetTexture(FramedumpBox));
 }
 
 void TitleState::Update()
@@ -151,6 +152,11 @@ void TitleState::Update()
    file_mouse.x -= m_file_tile->GetX();
    file_mouse.y -= m_file_tile->GetY();
    m_file_tile->Update(file_mouse);
+
+   MouseInfo framedump_mouse(mouse);
+   framedump_mouse.x -= m_framedump_tile->GetX();
+   framedump_mouse.y -= m_framedump_tile->GetY();
+   m_framedump_tile->Update(framedump_mouse);
 
    // Check to see for clicks on the file box
    if (m_file_tile->Hit())
@@ -296,6 +302,8 @@ void TitleState::Update()
       m_last_input_note_name = "";
    }
 
+   m_state.framedump = m_framedump_tile->GetFramedump();
+
 
    if (IsKeyPressed(KeyEscape) || m_back_button.hit)
    {
@@ -390,6 +398,7 @@ void TitleState::Draw(Renderer &renderer) const
    m_output_tile->Draw(renderer);
    m_input_tile->Draw(renderer);
    m_file_tile->Draw(renderer);
+   m_framedump_tile->Draw(renderer);
 
    if (m_input_tile->IsPreviewOn())
    {

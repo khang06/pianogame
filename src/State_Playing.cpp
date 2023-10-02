@@ -24,6 +24,8 @@ using namespace std;
 
 #include "libmidi/MidiComm.h"
 
+static constexpr unsigned long FRAME_DELAYS[3] = { 17, 17, 16 };
+
 void PlayingState::SetupNoteState()
 {
    TranslatedNoteSet old = m_notes;
@@ -64,6 +66,8 @@ void PlayingState::ResetSong()
 
    m_note_offset = 0;
    m_max_allowed_title_alpha = 1.0;
+
+   m_manual_ms = 0;
 }
 
 PlayingState::PlayingState(const SharedState &state)
@@ -72,6 +76,25 @@ PlayingState::PlayingState(const SharedState &state)
 
 void PlayingState::Init()
 {
+   if (m_state.framedump) {
+       m_framedump_handle = CreateNamedPipe(TEXT("\\\\.\\pipe\\synthesiaframedump"),
+           PIPE_ACCESS_OUTBOUND,
+           PIPE_TYPE_BYTE | PIPE_WAIT,
+           PIPE_UNLIMITED_INSTANCES,
+           static_cast<DWORD>(GetStateWidth() * GetStateHeight() * 4 * 120),
+           0,
+           0,
+           nullptr);
+       if (!m_framedump_handle) {
+           MessageBoxA(NULL, "Failed to create the framedump pipe!", NULL, 0);
+           exit(1);
+       }
+       m_framedump_fb = malloc(GetStateWidth() * GetStateHeight() * 4);
+       m_delay_idx = 0;
+       m_last_delta = 0;
+       MessageBoxA(NULL, "Click OK after connecting FFmpeg", "", 0);
+   }
+
    if (!m_state.midi) throw GameStateError("PlayingState: Init was passed a null MIDI!");
 
    m_look_ahead_you_play_note_count = 0;
@@ -86,7 +109,7 @@ void PlayingState::Init()
 
    // This many microseconds of the song will
    // be shown on the screen at once
-   const static microseconds_t DefaultShowDurationMicroseconds = 3250000;
+   const static microseconds_t DefaultShowDurationMicroseconds = 250000;
    m_show_duration = DefaultShowDurationMicroseconds;
 
    m_keyboard = new KeyboardDisplay(KeyboardSize128, GetStateWidth() - Layout::ScreenMarginX*2, CalcKeyboardHeight());
@@ -299,7 +322,7 @@ void PlayingState::Update()
    const static double fade_ms = 500.0;
 
    m_title_alpha = 0.0;
-   unsigned long ms = GetStateMilliseconds() * max(m_state.song_speed, 50) / 100;
+   unsigned long ms = (m_state.framedump ? m_manual_ms : GetStateMilliseconds()) * max(m_state.song_speed, 50) / 100;
    if (double(ms) <= stay_ms) m_title_alpha = std::min(1.0, ms / fade_in_ms);
    if (double(ms) >= stay_ms) m_title_alpha = std::min(std::max((fade_ms - (ms - stay_ms)) / fade_ms, 0.0), 1.0);
 
@@ -309,7 +332,7 @@ void PlayingState::Update()
    if (double(ms) > stay_ms) m_max_allowed_title_alpha = m_title_alpha;
 
 
-   microseconds_t delta_microseconds = static_cast<microseconds_t>(GetDeltaMilliseconds()) * 1000;
+   microseconds_t delta_microseconds = static_cast<microseconds_t>(m_state.framedump ? m_last_delta : GetDeltaMilliseconds()) * 1000;
 
    // The 100 term is really paired with the playback speed, but this
    // formation is less likely to produce overflow errors.
@@ -429,6 +452,12 @@ void PlayingState::Update()
 
       return;
    }
+
+   if (m_state.framedump) {
+       m_last_delta = FRAME_DELAYS[m_delay_idx];
+       m_manual_ms += m_last_delta;
+       m_delay_idx = (m_delay_idx + 1) % 3;
+   }
 }
 
 void PlayingState::Draw(Renderer &renderer) const
@@ -544,6 +573,11 @@ void PlayingState::Draw(Renderer &renderer) const
 
       TextWriter combo_text(combo_x, combo_y, renderer, true, combo_font_size);
       combo_text << WSTRING(m_current_combo << L" Combo!");
+   }
+
+   if (m_state.framedump) {
+       glReadPixels(0, 0, GetStateWidth(), GetStateHeight(), GL_BGRA_EXT, GL_UNSIGNED_BYTE, m_framedump_fb);
+       WriteFile(m_framedump_handle, m_framedump_fb, static_cast<DWORD>(GetStateWidth() * GetStateHeight() * 4), nullptr, nullptr);
    }
 }
 

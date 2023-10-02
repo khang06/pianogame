@@ -127,6 +127,7 @@
     <ClCompile Include="src\CompatibleSystem.cpp" />
     <ClCompile Include="src\DeviceTile.cpp" />
     <ClCompile Include="src\file_selector.cpp" />
+    <ClCompile Include="src\FramedumpTile.cpp" />
     <ClCompile Include="src\GameState.cpp" />
     <ClCompile Include="src\KeyboardDisplay.cpp" />
     <ClCompile Include="src\libmidi\Midi.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="src\DeviceTile.h" />
     <ClInclude Include="src\file_selector.h" />
     <ClInclude Include="src\FrameCounter.h" />
+    <ClInclude Include="src\FramedumpTile.h" />
     <ClInclude Include="src\GameState.h" />
     <ClInclude Include="src\KeyboardDisplay.h" />
     <ClInclude Include="src\libmidi\Midi.h" />

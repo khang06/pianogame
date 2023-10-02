@@ -11,6 +11,7 @@
 #include "libmidi/MidiTypes.h"
 #include "DeviceTile.h"
 #include "StringTile.h"
+#include "FramedumpTile.h"
 #include <vector>
 
 class Midi;
@@ -25,7 +26,7 @@ public:
    // screen pick a device for you.
    TitleState(const SharedState &state)
       : m_state(state), m_output_tile(0), m_input_tile(0),
-        m_file_tile(0), m_skip_next_mouse_up(false)
+        m_file_tile(0), m_framedump_tile(0), m_skip_next_mouse_up(false)
    { }
 
    ~TitleState();
@@ -49,6 +50,7 @@ private:
    DeviceTile *m_output_tile;
    DeviceTile *m_input_tile;
    StringTile *m_file_tile;
+   FramedumpTile *m_framedump_tile;
 
    bool m_skip_next_mouse_up;
 };

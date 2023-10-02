@@ -18,6 +18,7 @@ enum Texture
 
    InputBox,
    OutputBox,
+   FramedumpBox,
    SongBox,
 
    TrackPanel,
@@ -53,6 +54,7 @@ const static wchar_t* TextureResourceNames[_TextureEnumCount] =
 
    L"title_InputBox",
    L"title_OutputBox",
+   L"title_FramedumpBox",
    L"title_SongBox",
 
    L"trackbox",

@@ -99,6 +99,9 @@
     <ClCompile Include="src\libmidi\SynthVolume.cpp">
       <Filter>Main\Midi</Filter>
     </ClCompile>
+    <ClCompile Include="src\FramedumpTile.cpp">
+      <Filter>Main\State Support</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GameState.h">
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="src\resource.h">
       <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FramedumpTile.h">
+      <Filter>Main\State Support</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
